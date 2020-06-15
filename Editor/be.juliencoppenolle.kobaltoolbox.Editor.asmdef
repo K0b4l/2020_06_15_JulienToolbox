@@ -1,0 +1,16 @@
+{
+    "name": "be.juliencoppenolle.kobaltoolbox.Editor",
+    "references": [
+        "GUID:428587af1e8e49748a7652c899077738"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": []
+}

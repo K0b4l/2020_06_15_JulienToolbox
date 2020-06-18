@@ -1,14 +1,28 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 
 public class MovementOfTarget : MonoBehaviour
 {
-    Transform _targetposition;
-    public float _speed = 30;
+    public float _speed = 10;
+    int multiplier = 1;
 
-    private void Start()
+    private void Update()
     {
-        _targetposition
+        MoveBackForth();
+    }
+
+    void MoveBackForth()
+    {
+        if (transform.position.x >= 10)
+        {
+            multiplier = -1;
+        }
+        if (transform.position.x <= -10)
+        {
+            multiplier = 1;
+        }
+        transform.Translate(transform.right * _speed * Time.deltaTime *multiplier);
     }
 }

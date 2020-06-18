@@ -22,14 +22,11 @@ public class DetectInRangePlayerVision : MonoBehaviour
 
     private Material _mat;
 
-    private void Start()
-    {
-        userView = this.gameObject;
-        _mat = GetComponent<Renderer>().material;
-    }
-
     private void Awake()
     {
+        userView = this.gameObject;
+        _mat = objectTarget.GetComponent<Renderer>().material;
+
         objectShader = objectTarget.GetComponent<Renderer>().material;
         objectDirection = objectTarget.transform.position - userView.transform.position;
         VirtualRealityTags.GetClassicVrTag(VirtualRealityClassicTags.EyesCenter, out found, out given);

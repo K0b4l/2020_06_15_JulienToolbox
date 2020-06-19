@@ -5,55 +5,59 @@ using UnityEngine.Events;
 
 public class DetectInRangePlayerVision : MonoBehaviour
 {
-    GameObject userView; 
-    public GameObject objectTarget; 
-    Transform given; 
+    GameObject userView;
+    public GameObject[] objectTarget;
+    Transform given;
     bool found;
 
-    Vector3 objectDirection;
+    Vector3[] objectDirection;
 
     [SerializeField]
     float _shaderApparitionAngle = 100f;
 
     float _MaxAngle = 180f;
 
-    Material objectShader;
     public UnityEvent OnWithinSight;
 
-    private Material _mat;
+    private Material[] _mat;
 
     private void Awake()
     {
-        userView = this.gameObject;
-        _mat = objectTarget.GetComponent<Renderer>().material;
+        objectDirection = new Vector3[objectTarget.Length];
+        _mat = new Material[objectTarget.Length];
 
-        objectShader = objectTarget.GetComponent<Renderer>().material;
-        objectDirection = objectTarget.transform.position - userView.transform.position;
-        VirtualRealityTags.GetClassicVrTag(VirtualRealityClassicTags.EyesCenter, out found, out given);
-        
-        CheckAngle();
+        userView = this.gameObject;
+        for (int i = 0; i < objectTarget.Length; i++)
+        {
+            _mat[i] = objectTarget[i].GetComponent<Renderer>().material;
+
+            objectDirection[i] = objectTarget[i].transform.position - userView.transform.position;
+            VirtualRealityTags.GetClassicVrTag(VirtualRealityClassicTags.EyesCenter, out found, out given);
+
+            CheckAngle(i);
+        }
     }
 
-    private void CheckAngle()
+    private void CheckAngle(int index)
     {
-        Quaternion localQuaternionOfObject = Quaternion.LookRotation(objectDirection, given.up); 
+        Quaternion localQuaternionOfObject = Quaternion.LookRotation(objectDirection[index], given.up);
         float angle = Quaternion.Angle(given.rotation, localQuaternionOfObject);
 
-        SetShaderIntensity(angle);
+        SetShaderIntensity(angle, index);
     }
 
-    private void SetShaderIntensity(float angle)
+    private void SetShaderIntensity(float angle, int index)
     {
-        if ( angle >= _shaderApparitionAngle)
+        if (angle >= _shaderApparitionAngle)
         {
-            Switchhighlighted(true, angle);
+            Switchhighlighted(true, angle, index);
         }
-        else Switchhighlighted(false, angle);
+        else Switchhighlighted(false, angle, index);
     }
 
-    void Switchhighlighted(bool highlighted, float angle)
+    void Switchhighlighted(bool highlighted, float angle, int index)
     {
-        _mat.SetFloat("_Highlighted", (highlighted ? AngleToLerp(angle) : 0.0f));
+        _mat[index].SetFloat("_Highlighted", (highlighted ? AngleToLerp(angle) : 0.0f));
     }
 
     float AngleToLerp(float lerpedAngle)

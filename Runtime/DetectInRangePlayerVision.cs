@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -21,9 +22,10 @@ public class DetectInRangePlayerVision : MonoBehaviour
 
     private Material[] _mat;
 
-    private void Awake()
+
+    private void Update()
     {
-        objectDirection = new Vector3[objectTarget.Length];
+        objectTarget = IsHighlighTag.GetAllHighlightable().Select(k => k.gameObject).ToArray();
         _mat = new Material[objectTarget.Length];
 
         userView = this.gameObject;
@@ -35,7 +37,7 @@ public class DetectInRangePlayerVision : MonoBehaviour
             VirtualRealityTags.GetClassicVrTag(VirtualRealityClassicTags.EyesCenter, out found, out given);
 
             CheckAngle(i);
-        }
+        }        
     }
 
     private void CheckAngle(int index)
